@@ -23,7 +23,7 @@ def main():
                         help='number of total epochs to run')
     args = parser.parse_args()
     args.world_size = args.gpus * args.nodes
-    os.environ['MASTER_ADDR'] = '10.151.40.32'
+    os.environ['MASTER_ADDR'] = '10.151.40.232'
     os.environ['MASTER_PORT'] = '3500'
     mp.spawn(train, nprocs=args.gpus, args=(args,))
 
@@ -93,8 +93,7 @@ def train(gpu, args):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            if (i + 1) % 100 == 0 and gpu == 0:
-                print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'.format(epoch + 1, args.epochs, i + 1, total_step,
+            print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'.format(epoch + 1, args.epochs, i + 1, total_step,
                                                                          loss.item()))
     if gpu == 0:
         print("Training complete in: " + str(datetime.now() - start))
